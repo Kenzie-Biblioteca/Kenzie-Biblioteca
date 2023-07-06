@@ -11,12 +11,12 @@ class Loan(models.Model):
         default=timezone.now() + timezone.timedelta(hours=96)
     )
     copy = models.ForeignKey(
-        "copy.Copy",
+        "copys.Copy",
         on_delete=models.PROTECT,
         related_name="loans"
     )
     user = models.ForeignKey(
         "users.User",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="loans"
     )

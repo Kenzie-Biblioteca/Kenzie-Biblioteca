@@ -52,7 +52,7 @@ THIRD_PARTY_APPS = [
 MY_APPS = [
     'books',
     'copys',
-    'loan',
+    'loans',
     'users',
 ]
 
