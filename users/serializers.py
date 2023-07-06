@@ -7,7 +7,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'password',
-                  'full_name', 'is_employee', 'is_admin']
+                  'full_name', 'is_employee', 'is_admin', 'is_block']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -38,3 +38,4 @@ class LoginSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError(
                 'You must provide an email and password.')
+   
