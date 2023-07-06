@@ -24,4 +24,3 @@ urlpatterns = [
     path("api/", include("users.urls")),
     path("api/", include("loans.urls")),
 ]
-
