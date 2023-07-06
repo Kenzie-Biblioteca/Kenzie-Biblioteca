@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Copy
 from rest_framework.pagination import PageNumberPagination
 from .serializers import CopySerializer
-from books.models import Books
+from books.models import Book
 from rest_framework import generics
 
 
