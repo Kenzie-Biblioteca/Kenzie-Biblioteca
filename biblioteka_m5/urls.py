@@ -18,5 +18,3 @@ from django.contrib import admin
 from django.urls import path
 
 urlpatterns = [path("admin/", admin.site.urls)]
-# path("books/<int:pk>/copys/", copy_views.copyView.as_view()),
-# ]
