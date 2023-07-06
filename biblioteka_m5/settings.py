@@ -50,10 +50,10 @@ THIRD_PARTY_APPS = [
 ]
 
 MY_APPS = [
-    "books",
-    "copys",
-    "loans",
-    "users",
+    'books',
+    'copys',
+    'loans',
+    'users',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + MY_APPS
