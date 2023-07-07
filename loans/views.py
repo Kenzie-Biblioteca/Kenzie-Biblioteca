@@ -6,6 +6,7 @@ from loans.serializers import LoanSerializer
 
 # Create your views here.
 
+
 class LoanView(generics.CreateAPIView):
 
     serializer_class = LoanSerializer
