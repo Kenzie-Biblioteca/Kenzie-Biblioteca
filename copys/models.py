@@ -1,9 +1,12 @@
 from django.db import models
+import datetime
 
 
 class Copy(models.Model):
-    created_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField(auto_now_add=True)
+    created_date = models.DateField(default=datetime.date.today())
+    end_date = models.DateField(
+        default=datetime.date.today() + datetime.timedelta(days=4)
+    )
     is_available = models.BooleanField(default=True)
 
     book = models.ForeignKey(
