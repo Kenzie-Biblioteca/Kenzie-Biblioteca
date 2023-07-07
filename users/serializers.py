@@ -38,4 +38,3 @@ class LoginSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError(
                 'You must provide an email and password.')
-   

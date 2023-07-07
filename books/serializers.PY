@@ -5,8 +5,6 @@ from .models import Book
 
 
 class BookSerializer(serializers.ModelSerializer):
-    # user_id = UsersSerializer(read_only=True) caso queira mostrar tudo
-    # user_id = serializers.IntegerField(read_only=True) caso for só o id
 
     class Meta:
         model = Book

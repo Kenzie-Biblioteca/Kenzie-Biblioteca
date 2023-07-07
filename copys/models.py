@@ -2,11 +2,9 @@ from django.db import models
 
 
 class Copy(models.Model):
-    class Meta:
-        ordering = ("id",)
-
-    created_date = models.DateField()
-    end_date = models.DateField()
+    created_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(auto_now_add=True)
+    is_available = models.BooleanField(default=True)
 
     book = models.ForeignKey(
         "books.Book",
