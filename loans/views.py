@@ -4,6 +4,7 @@ from loans.models import Loan
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from loans.serializers import LoanSerializer
 
+# Create your views here.
 
 class LoanView(generics.CreateAPIView):
 
