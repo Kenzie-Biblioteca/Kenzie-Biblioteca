@@ -10,7 +10,6 @@ class LoanSerializer(serializers.ModelSerializer):
             "copy_id",
             "user_id",
             "blocked_date",
-            "end_blocked_date",
         ]
         extra_kwargs = {
             "id": {"ready_only": True},
