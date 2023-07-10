@@ -1,18 +1,12 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 
 
 class Loan(models.Model):
-    class Meta:
-        ordering = ["id"]
-
-    blocked_date = models.DateTimeField(auto_now_add=True)
-    end_blocked_date = models.DateField(
-        default=timezone.now() + timezone.timedelta(hours=96)
-    )
     copy = models.ForeignKey(
         "copys.Copy",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="loans"
     )
     user = models.ForeignKey(
@@ -20,3 +14,7 @@ class Loan(models.Model):
         on_delete=models.CASCADE,
         related_name="loans"
     )
+
+    created_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(default=timezone.now()+timedelta(hours=96))
+    book_returned = models.BooleanField(default=False, null=True)
