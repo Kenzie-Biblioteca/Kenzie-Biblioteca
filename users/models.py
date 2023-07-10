@@ -12,6 +12,4 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=128)
     is_employee = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    end_blocked_date = models.DateField(
-        default=datetime.date.today() + datetime.timedelta(days=4)
-    )
+    is_block = models.BooleanField(default=False)

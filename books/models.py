@@ -7,6 +7,6 @@ class Book(models.Model):
     description = models.TextField()
     pages = models.CharField(max_length=50)
 
-   # user = models.ForeignKey(
-   #     "users.User", on_delete=models.CASCADE, related_name="books"
-   # )
+    user = models.ManyToManyField(
+        "users.User", related_name="books"
+    )

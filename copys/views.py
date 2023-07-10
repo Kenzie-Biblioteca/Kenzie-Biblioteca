@@ -3,7 +3,6 @@ from rest_framework.views import APIView, Response, status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
 from .models import Copy
-from rest_framework.pagination import PageNumberPagination
 from .serializers import CopySerializer
 from books.models import Book
 from rest_framework import generics
