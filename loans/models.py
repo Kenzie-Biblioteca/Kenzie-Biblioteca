@@ -4,6 +4,7 @@ from datetime import timedelta
 
 
 class Loan(models.Model):
+
     copy = models.ForeignKey(
         "copys.Copy",
         on_delete=models.CASCADE,

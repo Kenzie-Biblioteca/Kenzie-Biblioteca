@@ -4,6 +4,7 @@ from django.utils import dates
 
 
 class Copy(models.Model):
+
     is_available = models.BooleanField(default=True)
 
     book = models.ForeignKey(

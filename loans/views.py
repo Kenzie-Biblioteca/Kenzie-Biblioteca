@@ -10,6 +10,7 @@ from datetime import timedelta
 from django.shortcuts import get_object_or_404
 
 
+
 class LoanView(generics.CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []

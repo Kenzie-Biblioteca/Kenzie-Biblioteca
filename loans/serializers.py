@@ -16,6 +16,7 @@ class LoanSerializer(serializers.ModelSerializer):
             "created_date",
             "end_date",
             "book_returned"
+
         ]
         read_only_fields = ["id", "created_date", "end_date", "book_returned"]
 
