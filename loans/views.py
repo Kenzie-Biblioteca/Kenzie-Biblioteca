@@ -10,7 +10,6 @@ from datetime import timedelta
 from django.shortcuts import get_object_or_404
 
 
-
 class LoanView(generics.CreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []
@@ -28,7 +27,8 @@ class LoanView(generics.CreateAPIView):
             raise ValidationError("This book is not available.")
 
         if user.is_block:
-            raise ValidationError("This user is currently blocked, wait 72 hours.")
+            raise ValidationError(
+                "This user is currently blocked, wait 72 hours.")
 
         copy.is_available = False
         self.returned_rule()
