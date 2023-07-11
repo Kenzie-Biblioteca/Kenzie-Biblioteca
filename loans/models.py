@@ -17,5 +17,5 @@ class Loan(models.Model):
     )
 
     created_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(default=timezone.now()+timedelta(hours=96))
+    end_date = models.DateTimeField()
     book_returned = models.BooleanField(default=False, null=True)

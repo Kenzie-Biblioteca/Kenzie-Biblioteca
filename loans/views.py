@@ -10,7 +10,7 @@ from datetime import timedelta
 from django.shortcuts import get_object_or_404
 
 
-class LoanView(generics.CreateAPIView):
+class LoanView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []
 
@@ -31,15 +31,21 @@ class LoanView(generics.CreateAPIView):
                 "This user is currently blocked, wait 72 hours.")
 
         copy.is_available = False
-        self.returned_rule()
+        copy.save()
+        end_date = self.returned_rule()
+        loan = serializer.save(copy=copy, user=user, end_date=end_date)
+        copy.loan = loan.id
         copy.save()
 
     def returned_rule(self):
         updated_date = timezone.now()
-        returned_date = updated_date + timedelta(hours=96)
+        returned_date = updated_date + timedelta(days=5)
 
-        if returned_date.weekday() > 4:
-            returned_date.weekday = 0
+        if returned_date.weekday() == 5:
+            returned_date += timedelta(days=2)
+        if returned_date.weekday() == 6:
+            returned_date += timedelta(days=1)
+        return returned_date
 
 
 class LoanDetailView(generics.UpdateAPIView):
@@ -48,16 +54,11 @@ class LoanDetailView(generics.UpdateAPIView):
 
     serializer_class = LoanSerializer
     queryset = Loan.objects.all()
-
+        
     def perform_update(self, serializer):
-        loan = Loan.objects.get(id=copy.id)
-        copy = get_object_or_404(Copy, pk=self.kwargs["pk"])
-
-        if loan.book_returned:
-            raise ValidationError("This book already returned.")
-
-        copy.is_available = True
+        loan = get_object_or_404(Loan, pk=self.kwargs["pk"])
         loan.book_returned = True
-
-        copy.save()
         loan.save()
+        copy = get_object_or_404(Copy, pk=loan.copy_id)
+        copy.is_available = True
+        copy.save()
