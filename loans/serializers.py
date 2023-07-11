@@ -16,7 +16,6 @@ class LoanSerializer(serializers.ModelSerializer):
             "created_date",
             "end_date",
             "book_returned"
-
         ]
         read_only_fields = ["id", "created_date", "end_date", "book_returned"]
 
@@ -24,18 +23,9 @@ class LoanSerializer(serializers.ModelSerializer):
         return Loan.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        copy = Copy.objects.get(id=validated_data["copy_id"])
-        copy.is_available = True
-        copy.save()
-
-        loans = Loan.objects.get(id=validated_data["loan_id"])
-        loans.book_returned = True
-        loans.save()
-
-        if validated_data["is_block"]:
-            user = User.objects.get(id=validated_data["user_id"])
+        user = User.objects.get(id=validated_data["user_id"])
+        if user["is_block"]:
             updated_date = timezone.now()
             blocked_date = updated_date + timedelta(hours=72)
             user.is_block = blocked_date
             user.save()
-        return loans
