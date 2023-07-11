@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .models import Book
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.shortcuts import get_object_or_404
 from .serializers import BookSerializer
 from rest_framework.response import Response
 from rest_framework import generics
@@ -8,7 +10,6 @@ from rest_framework.views import APIView
 
 class BookView(generics.ListCreateAPIView):
     authentication_classes = []
-    # criar permissão para que apenas o admin possa cadastrar os livros e que todos possam listar os livros (listar qualquer user)
     permission_classes = []
 
     queryset = Book.objects.all()
@@ -33,22 +34,27 @@ class CustomBookDetailView(BookDetailView):
 
 
 class FollowBookView(APIView):
-    authentication_classes = []  # passar o jwt aqui estilo de outras entregas
+    authentication_classes = [JWTAuthentication]
     permission_classes = []
 
-    def post(self, request, book_id):
-        book = Book.objects.get(id=book_id)  # usar get_for_error_404
+    def patch(self, request, pk):
+        book = get_object_or_404(Book, pk=self.kwargs.get("pk"))
         request.user.followed_books.add(book)
-        return Response({'message': 'Book followed.'})
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+
+    def get(self, request, pk):
+        book = get_object_or_404(Book, pk=self.kwargs.get("pk"))
+        request.user.followed_books.add(book)
+        return Response(book)
 
 
 class UnfollowBookView(APIView):
-    authentication_classes = []  # passar o jwt aqui estilo de outras entregas
+    authentication_classes = [JWTAuthentication]
     permission_classes = []
 
-    def delete(self, request, book_id):
-        book = Book.objects.get(id=book_id)  # usar get_for_error_404
+    def delete(self, request, pk):
+        book = get_object_or_404(Book, pk=self.kwargs.get("pk"))
+
         request.user.followed_books.remove(book)
         return Response({'message': 'Book unfollowed.'})
-
-# passar o id do livro e o token do user no beers
