@@ -1,9 +1,10 @@
 from django.db import models
+from django.utils import timezone
+from django.utils import dates
 
 
 class Copy(models.Model):
-    created_date = models.DateField(auto_now_add=True)
-    end_date = models.DateField(auto_now_add=True)
+
     is_available = models.BooleanField(default=True)
 
     book = models.ForeignKey(
