@@ -3,8 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 import datetime
 
-# from books.models import Book
-
 
 class User(AbstractUser):
 
@@ -15,4 +13,5 @@ class User(AbstractUser):
     is_employee = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     is_block = models.BooleanField(default=False)
-    # followed_books = models.ManyToManyField(Book, related_name='followers')
+    followed_books = models.ManyToManyField(
+        "books.Book", related_name='followers')
