@@ -8,14 +8,17 @@ from copys.models import Copy
 from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
 
 class LoanView(generics.ListCreateAPIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = []
+    permission_classes = [IsAuthenticated]
 
     serializer_class = LoanSerializer
     queryset = Loan.objects.all()
+
 
     def perform_create(self, serializer):
         copy_id = self.request.data.get("copy_id")
@@ -40,7 +43,7 @@ class LoanView(generics.ListCreateAPIView):
     def returned_rule(self):
         updated_date = timezone.now()
         returned_date = updated_date + timedelta(days=5)
-
+        
         if returned_date.weekday() == 5:
             returned_date += timedelta(days=2)
         if returned_date.weekday() == 6:
@@ -48,13 +51,43 @@ class LoanView(generics.ListCreateAPIView):
         return returned_date
 
 
+
+    def get_queryset(self):
+        if self.request.user.is_superuser:
+            return Loan.objects.all()
+        return Loan.objects.filter(user=self.request.user)
+    
+    @extend_schema(
+        operation_id = 'Loan_get', #(1)
+        parameters=[LoanSerializer],
+        request=LoanSerializer, #(3)
+        responses={200: LoanSerializer}, #(4)
+        description = 'Rota para ver histórico de empréstimos', #(5)
+        summary = 'Ver histórico',
+        tags = ['Loan'], #(8)
+    )   
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+    
+    @extend_schema(
+        operation_id = 'Loan_post', #(1)
+        parameters=[LoanSerializer],
+        request=LoanSerializer, #(3)
+        responses={201: LoanSerializer}, #(4)
+        description = 'Rota para criar o empréstimo de um Livro', #(5)
+        summary = 'Criar empréstimo',
+        tags = ['Loan'], #(8)
+    )   
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
 class LoanDetailView(generics.UpdateAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = []
 
     serializer_class = LoanSerializer
     queryset = Loan.objects.all()
-        
+
     def perform_update(self, serializer):
         loan = get_object_or_404(Loan, pk=self.kwargs["pk"])
         loan.book_returned = True
@@ -62,3 +95,24 @@ class LoanDetailView(generics.UpdateAPIView):
         copy = get_object_or_404(Copy, pk=loan.copy_id)
         copy.is_available = True
         copy.save()
+
+    @extend_schema(
+        operation_id = 'Loan_id_patch', #(1)
+        parameters=[LoanSerializer],
+        request=LoanSerializer, #(3)
+        responses={200: LoanSerializer}, #(4)
+        description = 'Rota para atualizar o empréstimo de um Livro', #(5)
+        summary = 'Atualizar empréstimo',
+        tags = ['Loan'], #(8)
+    )   
+    def patch(self, request, *args, **kwargs):
+        return super().patch(request, *args, **kwargs)
+    
+    @extend_schema(
+        operation_id = 'Loan_id_put', #(1)
+        exclude=True,
+        deprecated=True,
+        tags = ['Loan'], #(8)
+    )   
+    def put(self, request, *args, **kwargs):
+        return super().put(request, *args, **kwargs)
