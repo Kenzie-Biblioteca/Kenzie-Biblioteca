@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from .models import Book
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.shortcuts import get_object_or_404
 from .serializers import BookSerializer
 from rest_framework.response import Response
 from rest_framework import generics
@@ -32,12 +34,27 @@ class CustomBookDetailView(BookDetailView):
 
 
 class FollowBookView(APIView):
-    def post(self, request, book_id):
-        book = Book.objects.get(id=book_id)
-        request.user.followed_books.add(book)
-        return Response({'message': 'Book followed.'})
+    authentication_classes = [JWTAuthentication]
+    permission_classes = []
 
-    def delete(self, request, book_id):
-        book = Book.objects.get(id=book_id)
+    def patch(self, request, pk):
+        book = get_object_or_404(Book, pk=self.kwargs.get("pk"))
+        request.user.followed_books.add(book)
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
+
+    def get(self, request, pk):
+        book = get_object_or_404(Book, pk=self.kwargs.get("pk"))
+        request.user.followed_books.add(book)
+        return Response(book)
+
+
+class UnfollowBookView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = []
+
+    def delete(self, request, pk):
+        book = get_object_or_404(Book, pk=self.kwargs.get("pk"))
+
         request.user.followed_books.remove(book)
         return Response({'message': 'Book unfollowed.'})

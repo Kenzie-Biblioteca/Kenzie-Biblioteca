@@ -21,8 +21,6 @@ class Book(models.Model):
             sender = follower.email  # Endereço de e-mail do seguidor como remetente
             send_mail(subject, message, sender, recipient_list)
 
-#    user = models.ForeignKey("users.User", on_delete=models.CASCADE, related_name="books")
-
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
